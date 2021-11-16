@@ -19,6 +19,20 @@ const ThoughtForm = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
+    const postData = async () => {
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formState),
+      });
+      const data = await res.json();
+      console.log(data);
+    };
+    postData();
+
     // clear form value
     setFormState({ username: "", thought: "" });
     setCharacterCount(0);
@@ -30,24 +44,24 @@ const ThoughtForm = () => {
         Character Count: {characterCount}/280
       </p>
       <form
-        className="flex-row justify-center justify-space-between-md align-stretch"
+        className='flex-row justify-center justify-space-between-md align-stretch'
         onSubmit={handleFormSubmit}
       >
         <input
-          placeholder="Name"
-          name="username"
+          placeholder='Name'
+          name='username'
           value={formState.username}
-          className="form-input col-12 "
+          className='form-input col-12 '
           onChange={handleChange}
         ></input>
         <textarea
           placeholder="Here's a new thought..."
-          name="thought"
+          name='thought'
           value={formState.thought}
-          className="form-input col-12 "
+          className='form-input col-12 '
           onChange={handleChange}
         ></textarea>
-        <button className="btn col-12 " type="submit">
+        <button className='btn col-12 ' type='submit'>
           Submit
         </button>
       </form>
