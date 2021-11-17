@@ -1,7 +1,6 @@
 {
   "name": "aws-thought",
   "version": "1.0.0",
-  "description": "",
   "main": "server/server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
@@ -20,6 +19,15 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "concurrently": "^5.1.0"
-  }
+    "concurrently": "^6.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cornwalljeremy/aws-thoughts.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cornwalljeremy/aws-thoughts/issues"
+  },
+  "homepage": "https://github.com/cornwalljeremy/aws-thoughts#readme",
+  "description": ""
 }
