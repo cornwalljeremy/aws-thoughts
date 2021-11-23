@@ -1,7 +1,7 @@
 version = 0.1
-[default]
-[default.deploy]
-[default.deploy.parameters]
+[y]
+[y.deploy]
+[y.deploy.parameters]
 stack_name = "thoughts-app-stack"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-vm80ddr1fu8"
 s3_prefix = "thoughts-app-stack"
