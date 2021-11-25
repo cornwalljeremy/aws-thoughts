@@ -17,6 +17,30 @@ Resources:
             Path: /api/users
             Method: GET
       CodeUri: getAllThoughtsFunction
+  getByUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/get-by-user.getByUserHandler
+      Runtime: nodejs14.x
+      Events:
+        ThoughtsApi:
+          Type: Api
+          Properties:
+            Path: /api/users/{username}
+            Method: GET
+      CodeUri: getByUserFunction
+  putThoughtFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/put-thought.putThoughtHandler
+      Runtime: nodejs14.x
+      Events:
+        ThoughtsApi:
+          Type: Api
+          Properties:
+            Path: /api/users
+            Method: POST
+      CodeUri: putThoughtFunction
 Outputs:
   ThoughtsApi:
     Description: SAM Template for thoughts-app
