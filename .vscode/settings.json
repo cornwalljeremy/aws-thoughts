@@ -1,18 +1,4 @@
 {
-  "serverlessConsole.services": [
-    {
-      "type": "cloudformation",
-      "title": "Lambda Logs",
-      "timeOffsetInMs": 0,
-      "awsProfile": "default",
-      "stacks": [
-        {
-          "region": "us-east-2",
-          "stackName": "thoughts-app-stack",
-          "stage": "dev"
-        }
-      ]
-    }
-  ],
+  "serverlessConsole.services": [],
   "serverlessConsole.searchByLogStreams": false
 }
