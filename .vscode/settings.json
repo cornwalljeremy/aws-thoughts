@@ -12,6 +12,13 @@
           "stage": "dev"
         }
       ]
+    },
+    {
+      "type": "dynamodb",
+      "title": "thoughts-app-stack-ThoughtsTable-D7PIE11I8EDC",
+      "tableName": "thoughts-app-stack-ThoughtsTable-D7PIE11I8EDC",
+      "awsProfile": "default",
+      "region": "us-east-2"
     }
   ],
   "serverlessConsole.searchByLogStreams": false
