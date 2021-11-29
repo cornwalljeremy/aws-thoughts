@@ -1,25 +1,41 @@
+// Import the DynamoDB service
+const dynamodb = require('aws-sdk/clients/dynamodb');
+const docClient = new dynamodb.DocumentClient();
+// Get the table name from environment variable
+const tableName = process.env.TABLE_NAME;
+
 exports.getByUserHandler = async (event) => {
-  if (event.httpMethod !== "GET") {
-    throw new Error(
-      `getMethod only accept GET method, you tried: ${event.httpMethod}`
-    );
-  }
-  // All log statements are written to CloudWatch
-  console.info("received:", event);
+  // Retrieve the path parameter from the event object. 
+  // Reformat the path parameter to allow DynamoDB to query the request.
+  const username = event.pathParameters.username.split('%20').join(' ');
+  const params = {
+    TableName: tableName,
+    KeyConditionExpression: '#un = :user',
+    ExpressionAttributeNames: {
+      '#un': 'username',
+      '#ca': 'createdAt',
+      '#th': 'thought',
+    },
+    ExpressionAttributeValues: {
+      ':user': username,
+    },
+    ProjectionExpression: '#un, #th, #ca', 
+    ScanIndexForward: false, // false makes the order descending (true is default)
+  };
 
-  // Get username from pathParameters from APIGateway because of `/{username}` in the template.yaml
-  const username = event.pathParameters.username;
+  // Query the DynamoDB table
+  const { Items } = await docClient.query(params).promise();
 
+  // Form the response
   const response = {
     statusCode: 200,
-    body: JSON.stringify({
-      message: `get by ${username}`,
-    }),
+    body: JSON.stringify(Items),
   };
 
   // All log statements are written to CloudWatch
   console.info(
     `response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`
   );
+
   return response;
 };

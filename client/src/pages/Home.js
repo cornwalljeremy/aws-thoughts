@@ -8,21 +8,18 @@ const Home = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const res = await fetch("/api/users");
-        const jsonData = await res.json();
-        // sort the array by createdAt property ordered by descending values
-        const data = jsonData.sort((a, b) =>
-          a.createdAt < b.createdAt ? 1 : -1
-        );
-        setThoughts([...data]);
-        setIsLoaded(true);
-      } catch (error) {
-        console.log(error);
-      }
+      const res = await fetch(
+        "https://g2iyl7jbgb.execute-api.us-east-2.amazonaws.com/Prod/api/users/"
+      );
+      const data = await res.json();
+
+      setThoughts([...data]);
+      setIsLoaded(true);
     };
     fetchData();
   }, []);
+
+  useEffect(() => {}, [thoughts]);
 
   return (
     <main>
