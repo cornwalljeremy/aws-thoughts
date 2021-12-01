@@ -1,26 +1,27 @@
 // Import the DynamoDB service
-const dynamodb = require('aws-sdk/clients/dynamodb');
+const dynamodb = require("aws-sdk/clients/dynamodb");
 const docClient = new dynamodb.DocumentClient();
 // Get the table name from environment variable
 const tableName = process.env.TABLE_NAME;
 
 exports.getByUserHandler = async (event) => {
-  // Retrieve the path parameter from the event object. 
+  // Retrieve the path parameter from the event object.
   // Reformat the path parameter to allow DynamoDB to query the request.
-  const username = event.pathParameters.username.split('%20').join(' ');
+  const username = event.pathParameters.username.split("%20").join(" ");
   const params = {
     TableName: tableName,
-    KeyConditionExpression: '#un = :user',
+    KeyConditionExpression: "#un = :user",
     ExpressionAttributeNames: {
-      '#un': 'username',
-      '#ca': 'createdAt',
-      '#th': 'thought',
+      "#un": "username",
+      "#ca": "createdAt",
+      "#th": "thought",
+      "#im": "image", // add the image attribute
     },
     ExpressionAttributeValues: {
-      ':user': username,
+      ":user": username,
     },
-    ProjectionExpression: '#un, #th, #ca', 
-    ScanIndexForward: false, // false makes the order descending (true is default)
+    ProjectionExpression: "#un, #th, #ca, #im", // add the expression
+    ScanIndexForward: false, // false makes the order descending, true is default
   };
 
   // Query the DynamoDB table
@@ -30,9 +31,9 @@ exports.getByUserHandler = async (event) => {
   const response = {
     statusCode: 200,
     headers: {
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'OPTIONS,POST,GET',
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
     },
     body: JSON.stringify(Items),
   };

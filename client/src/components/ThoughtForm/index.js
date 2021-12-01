@@ -9,12 +9,45 @@ const ThoughtForm = () => {
   const [characterCount, setCharacterCount] = useState(0);
   const fileInput = useRef(null);
 
+  const setImageData = async (objectURL) => {
+    return await setFormState({ ...formState, image: objectURL });
+  };
   // uploads image to the S3 bucket
-  const handleImageUpload = event => {
+  // uploads image to the S3 bucket
+  const handleImageUpload = async (event) => {
+    const getUploadUrl = async () => {
+      const res = await fetch(
+        "https://g2iyl7jbgb.execute-api.us-east-2.amazonaws.com/Prod/api/pre-url"
+      );
+
+      return res.json();
+    };
     event.preventDefault();
-  
-    // post image to S3 bucket
-   
+    const file = fileInput.current.files[0];
+    // retrieve the URL and file name
+    try {
+      var { uploadURL, publicURL } = await getUploadUrl();
+    } catch (err) {
+      console.error(err);
+    }
+    const setRes = await setImageData(publicURL);
+
+    try {
+      var result = await fetch(uploadURL, {
+        method: "PUT",
+        body: file,
+      });
+      console.log("result: ", result);
+    } catch (err) {
+      console.error(err);
+    }
+
+    if (setRes) {
+      console.log("publicURL: ", publicURL);
+      console.log("formState: ", formState);
+    }
+
+    return formState;
   };
 
   // update state based on form input changes
@@ -55,32 +88,32 @@ const ThoughtForm = () => {
         Character Count: {characterCount}/280
       </p>
       <form
-        className="flex-row justify-center justify-space-between-md align-stretch"
+        className='flex-row justify-center justify-space-between-md align-stretch'
         onSubmit={handleFormSubmit}
       >
         <input
-          placeholder="Name"
-          name="username"
+          placeholder='Name'
+          name='username'
           value={formState.username}
-          className="form-input col-12 "
+          className='form-input col-12 '
           onChange={handleChange}
         ></input>
         <textarea
           placeholder="Here's a new thought..."
-          name="thought"
+          name='thought'
           value={formState.thought}
-          className="form-input col-12 "
+          className='form-input col-12 '
           onChange={handleChange}
         ></textarea>
-        <label className="form-input col-12  p-1">
+        <label className='form-input col-12  p-1'>
           Add an image to your thought:
-          <input type="file" ref={fileInput} className="form-input p-2 " />
-          <button className="btn " onClick={handleImageUpload} type="submit">
+          <input type='file' ref={fileInput} className='form-input p-2 ' />
+          <button className='btn ' onClick={handleImageUpload} type='submit'>
             Upload
           </button>
         </label>
 
-        <button className="btn col-12 " type="submit">
+        <button className='btn col-12 ' type='submit'>
           Submit
         </button>
       </form>

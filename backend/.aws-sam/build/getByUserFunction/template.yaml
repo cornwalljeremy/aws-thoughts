@@ -6,6 +6,7 @@ Description: SAM Template for thoughts-app
 Globals:
   Function:
     Timeout: 3
+
 Resources:
   getAllThoughtsFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -61,6 +62,46 @@ Resources:
         Variables:
           TABLE_NAME: !Ref ThoughtsTable
 
+  getUrlFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      Handler: src/handlers/get-url.getUrlHandler
+      Runtime: nodejs14.x
+      Environment:
+        Variables:
+          UPLOAD_BUCKET: !Ref S3UploadBucket
+      Policies:
+        - S3WritePolicy:
+            BucketName: !Ref S3UploadBucket
+      ## This permission allows the Lambda function to request signed URLs
+      ## for objects that will be publicly readable.
+        - Statement:
+          - Effect: Allow
+            Resource: !Sub 'arn:aws:s3:::${S3UploadBucket}/'
+            Action:
+              - s3:putObjectAcl
+      Events:
+        ThoughtsApi:
+          Type: Api 
+          Properties:
+            Path: /api/pre-url
+            Method: GET
+
+  ## S3 bucket
+  S3UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      CorsConfiguration:
+        CorsRules:
+        - AllowedHeaders:
+            - "*"
+          AllowedMethods:
+            - GET
+            - PUT
+            - HEAD
+          AllowedOrigins:
+            - "*"
+
   ThoughtsTable: 
     Type: AWS::DynamoDB::Table
     Properties: 
@@ -88,3 +129,6 @@ Outputs:
   ThoughtsTable:
     Description: "DynamoDB table"
     Value: !GetAtt ThoughtsTable.Arn
+  S3UploadBucketName:
+    Description: "S3 bucket for image uploads"
+    Value: !Ref "S3UploadBucket"
