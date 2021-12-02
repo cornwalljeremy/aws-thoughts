@@ -1,0 +1,15 @@
+{
+    "Id": "Policy1638410731183",
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "Stmt1638410727335",
+        "Action": [
+          "s3:GetObject"
+        ],
+        "Effect": "Allow",
+        "Resource": "arn:aws:s3:::thoughtbuckets/*",
+        "Principal": "*"
+      }
+    ]
+  }

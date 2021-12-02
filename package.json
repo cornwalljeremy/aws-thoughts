@@ -8,7 +8,8 @@
     "start:dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
     "install": "cd server && npm i && cd ../client && npm i",
     "build": "cd client && npm run build",
-    "sam": "cd backend && sam build && sam deploy"
+    "sam": "cd backend && sam build && sam deploy",
+    "deploy": "aws s3 sync ./client/build/ s3://thoughtbuckets"
   },
   "keywords": [],
   "author": "",

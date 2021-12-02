@@ -69,8 +69,10 @@ const ThoughtForm = () => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
+       
         body: JSON.stringify(formState),
       });
+      console.log(res.json)
       console.log("Submit: ", formState);
       const data = await res.json();
     };
